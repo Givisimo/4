@@ -16,8 +16,8 @@ const notepad = {
      * Принимает: идентификатор заметки
      * Возвращает: заметку с совпавшим полем id или undefined если ничего не найдено
      */
-    for (let i = 0; i < this.notes.length; i += 1) {
-      const noteFinded = this.notes[i];
+    for (const note of this.notes) {
+      const noteFinded = note;
       if (noteFinded.id === id) {
         return noteFinded;
       }
@@ -31,6 +31,7 @@ const notepad = {
      * Возвращает: сохраненную заметку
      */
     this.notes.push(note);
+    return note;
   },
   deleteNote(id) {
     /*
@@ -39,12 +40,8 @@ const notepad = {
      * Принимает: идентификатор заметки
      * Возвращает: ничего
      */
-    for (let i = 0; i < this.notes.length; i += 1) {
-      const noteFinded = this.notes[i];
-      if (noteFinded.id === id) {
-        this.notes.splice(i, 1);
-      }
-    }
+    const noteToDelete = this.notes.indexOf(this.findNoteById(id));
+    this.notes.splice(noteToDelete, 1);
   },
   updateNoteContent(id, updatedContent) {
     /*
@@ -56,9 +53,8 @@ const notepad = {
      * Возвращает: обновленную заметку
      */
     for (let i = 0; i < this.notes.length; i += 1) {
-      const noteFinded = this.notes[i];
       if (this.notes[i].id === id) {
-        return this.notes[i] = {...noteFinded,...updatedContent};
+        return (this.notes[i] = { ...this.notes[i], ...updatedContent });
       }
     }
   },
@@ -70,13 +66,8 @@ const notepad = {
      * Возвращает: обновленную заметку
      */
     const priorityValues = Object.values(Priority);
-
-    for (let i = 0; i < this.notes.length; i += 1) {
-      const noteFinded = this.notes[i];
-      if (noteFinded.id === id) {
-        return (noteFinded.priority = priorityValues[priority]);
-      }
-    }
+    const noteFinded = this.findNoteById(id);
+    return (noteFinded.priority = priorityValues[priority]);
   },
   filterNotesByQuery(query) {
     /*
@@ -87,8 +78,8 @@ const notepad = {
      * Возвращает: новый массив заметок, контент которых содержит подстроку
      */
     const filteredNotes = [];
-    for (let i = 0; i < this.notes.length; i += 1) {
-      const element = this.notes[i];
+    for (const note of this.notes) {
+      const element = note;
       if (
         element.body.toLowerCase().includes(query) ||
         element.title.toLowerCase().includes(query)
@@ -108,8 +99,8 @@ const notepad = {
      * Возвращает: новый массив заметок с подходящим приоритетом
      */
     const filteredNotes = [];
-    for (let i = 0; i < this.notes.length; i += 1) {
-      const noteFinded = this.notes[i];
+    for (const note of this.notes) {
+      const noteFinded = note;
       if (noteFinded.priority === priority) {
         filteredNotes.push(noteFinded);
       }
@@ -174,8 +165,8 @@ console.log(
 /*
  * Решил что фреймворки отложу немного, понижаю приоритет
  */
- notepad.updateNotePriority('id-3', Priority.LOW);
-//
+notepad.updateNotePriority('id-3', Priority.LOW);
+
 console.log(
   'Заметки после обновления приоритета для id-3: ',
   notepad.getNotes(),
@@ -188,10 +179,10 @@ console.log(
   'Отфильтровали заметки по ключевому слову "html": ',
   notepad.filterNotesByQuery('html'),
 );
-//
-// /*
-//  * Решил отфильтровать заметки по слову javascript
-//  */
+
+/*
+ * Решил отфильтровать заметки по слову javascript
+ */
 console.log(
   'Отфильтровали заметки по ключевому слову "javascript": ',
   notepad.filterNotesByQuery('javascript'),
@@ -222,4 +213,3 @@ console.log(
  */
 notepad.deleteNote('id-2');
 console.log('Заметки после удаления с id -2: ', notepad.getNotes());
-
