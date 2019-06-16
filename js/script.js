@@ -52,9 +52,11 @@ const notepad = {
      * Принимает: идентификатор заметки и объект, полями которого надо обновить заметку
      * Возвращает: обновленную заметку
      */
-    for (let i = 0; i < this.notes.length; i += 1) {
-      if (this.notes[i].id === id) {
-        return (this.notes[i] = { ...this.notes[i], ...updatedContent });
+    const noteFinded = this.findNoteById(id);
+
+    for (let key in noteFinded) {
+      if (Object.keys(updatedContent).includes(key)) {
+        return (noteFinded[key] = updatedContent[key]);
       }
     }
   },
@@ -65,9 +67,8 @@ const notepad = {
      * Принимает: идентификатор заметки и ее новый приоритет
      * Возвращает: обновленную заметку
      */
-    const priorityValues = Object.values(Priority);
     const noteFinded = this.findNoteById(id);
-    return (noteFinded.priority = priorityValues[priority]);
+    return (noteFinded.priority = priority);
   },
   filterNotesByQuery(query) {
     /*
