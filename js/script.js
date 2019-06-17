@@ -53,12 +53,7 @@ const notepad = {
      * Возвращает: обновленную заметку
      */
     const noteFinded = this.findNoteById(id);
-
-    for (let key in noteFinded) {
-      if (Object.keys(updatedContent).includes(key)) {
-        return (noteFinded[key] = updatedContent[key]);
-      }
-    }
+    return Object.assign(noteFinded, updatedContent);
   },
   updateNotePriority(id, priority) {
     /*
@@ -67,8 +62,6 @@ const notepad = {
      * Принимает: идентификатор заметки и ее новый приоритет
      * Возвращает: обновленную заметку
      */
-    const noteFinded = this.findNoteById(id);
-    return (noteFinded.priority = priority);
   },
   filterNotesByQuery(query) {
     /*
