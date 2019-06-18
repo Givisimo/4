@@ -62,6 +62,8 @@ const notepad = {
      * Принимает: идентификатор заметки и ее новый приоритет
      * Возвращает: обновленную заметку
      */
+    const noteFinded = this.findNoteById(id);
+    return (noteFinded.priority = priority);
   },
   filterNotesByQuery(query) {
     /*
